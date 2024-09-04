@@ -1,0 +1,28 @@
+package kroryi.demo;
+
+import kroryi.demo.domain.Order;
+import kroryi.demo.dto.OrderItemDTO;
+import kroryi.demo.service.OrderService;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/orders")
+@Log4j2
+public class OrderController {
+    @Autowired
+    private OrderService orderService;
+
+    @PostMapping("/create")
+    public ResponseEntity<Order> createOrder(@RequestParam Long customerId, @RequestBody List<OrderItemDTO> orderItems) {
+        log.info("Order-> {}" , customerId);
+        log.info("Order Item-> {}",orderItems.toString());
+        Order order = orderService.createOrder(customerId, orderItems);
+
+        return ResponseEntity.ok(order);
+    }
+}

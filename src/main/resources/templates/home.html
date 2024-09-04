@@ -1,10 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout.html}">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-여기는 홈입니다.
+<!--<div layout:fragment="home">-->
+
+    <ul>
+        <li th:each="user:${users}">
+            <span th:text="${user.getId()}"></span>
+            <span th:text="${user.getUsername()}"></span>
+            <span th:text="${user.getEmail()}"></span>
+            <span th:text="${user.getAddress()}"></span>
+        </li>
+    </ul>
+<!--</div>-->
+
+<!--<div layout:fragment="profile">
+    <div>
+        dfsdfsdfsdfsdfsdaf
+    </div>
+
+</div>
+
+<div layout:fragment="dropdown1">
+
+    <div>
+        ============================
+    </div>
+</div>-->
+
 </body>
 </html>
