@@ -2,6 +2,7 @@ package kroryi.demo.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kroryi.demo.domain.Board;
+import kroryi.demo.domain.BoardImage;
 import kroryi.demo.domain.QBoard;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 
@@ -27,14 +30,15 @@ public class BoardRepositoryTests {
 
     @Autowired
     JPAQueryFactory jpaQueryFactory;
-//
+
+    //
     @Test
-    public void testInsert(){
-        IntStream.rangeClosed(1,100).forEach(i -> {
+    public void testInsert() {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
             Board board = Board.builder()
                     .title("하하하" + i)
-                    .content("내용" +i)
-                    .writer("사용자" + (i%10))
+                    .content("내용" + i)
+                    .writer("사용자" + (i % 10))
                     .build();
             Board result = boardRepository.save(board);
             log.info("BNO: {}", result.getBno());
@@ -142,18 +146,44 @@ public class BoardRepositoryTests {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
         QBoard qBoard = QBoard.board;
 
-        String[] types={"t", "c", "w"};
-        Page<Board> result = boardRepository.searchAll(types, "하하하8", pageable);
+        String[] types = {"t", "c", "w", "d"};
+        Page<Board> result = boardRepository.searchAll(types, "사용자", pageable);
         System.out.println(result.getTotalPages());
         System.out.println(result.getTotalElements());
         System.out.println(result.getContent());
         log.info(String.valueOf(result.getTotalPages()));
 
-        result.getContent().forEach( board-> {
+        result.getContent().forEach(board -> {
             System.out.println(board.getTitle());
         });
     }
 
+    @Test
+    public void testInsertWithImages() {
+        Board board = Board.builder()
+                .title("이미지 들어간 게시물")
+                .content("첨부파일 확인")
+                .writer("tester")
+                .build();
 
+        for (int i = 0; i < 3; i++) {
+            board.addImage(UUID.randomUUID().toString(), "file" + i + ".jpg");
+        }
+
+        boardRepository.save(board);
+    }
+
+    @Test
+    public void testReadWithImages() {
+        Optional<Board> result = boardRepository.findByIdWithImages(325L);
+        Board board = result.orElseThrow();
+
+        log.info("board-> {}", board);
+        log.info("-----------------");
+        for (BoardImage boardImage : board.getImageSet()) {
+            log.info("image-> {}", board.getImageSet());
+        }
+
+    }
 
 }

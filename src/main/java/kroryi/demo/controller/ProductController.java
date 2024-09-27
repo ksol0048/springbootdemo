@@ -1,4 +1,4 @@
-package kroryi.demo;
+package kroryi.demo.controller;
 
 import kroryi.demo.domain.Category;
 import kroryi.demo.domain.Product;

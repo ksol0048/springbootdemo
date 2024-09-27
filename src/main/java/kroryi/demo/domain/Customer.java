@@ -28,9 +28,9 @@ public class Customer {
     @Column(name = "age")
     private int age;
 
-    @OneToOne(cascade = CascadeType.ALL)
+  /*  @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id", referencedColumnName = "id")
-    private Address address;
+    private Address address;*/
 
     // CascadeType.REMOVE 부모 엔티티가 삭제될 때 자식 엔티티도 함께 삭제
     // orphanRemoval =true 부모 엔티티가 자식 엔티티와의 관계를 끊을때
@@ -39,5 +39,9 @@ public class Customer {
     @JsonIgnore
     private List<Order> orders;
 
+    @ToString.Exclude
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "address_id")
+    private Address address;
 
 }

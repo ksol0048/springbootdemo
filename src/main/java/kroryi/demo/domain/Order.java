@@ -1,40 +1,42 @@
 package kroryi.demo.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Builder
-@ToString(exclude = "customer")
-@Table(name = "orders")
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "orders", schema = "webdb")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<OrderItem> orderItems = new ArrayList<>();
-
+    @Column(name = "order_date")
     private LocalDate orderDate;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @Column(name = "oder_date")
+    private LocalDate oderDate;
+
+    @Column(name = "total_amount", precision = 38, scale = 2)
     private BigDecimal totalAmount;
 
-    @PrePersist
-    protected void onCreate() {
-        orderDate = LocalDate.now();
-    }
+    @OneToMany(mappedBy = "order")
+    private List<OrderItem> orderItems = new ArrayList<>();
+
 }

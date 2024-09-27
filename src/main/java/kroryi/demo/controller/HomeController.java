@@ -1,6 +1,5 @@
-package kroryi.demo;
+package kroryi.demo.controller;
 
-import kroryi.demo.domain.Employee;
 import kroryi.demo.domain.User;
 import kroryi.demo.service.EmployeeService;
 import kroryi.demo.service.UserService;
@@ -40,15 +39,11 @@ public class HomeController {
         return "home";
     }
 
-   /* @GetMapping("/home")
+    @GetMapping("/")
     public String home() {
 
-        List<Employee> employeeList = employeeService.findDepartment("회계부");
-
-        System.out.println(employeeList.toString());
-
-        return "home";
-    }*/
+        return "redirect:/board/list";
+    }
 
     @GetMapping("/user")
     public String userUpdate() {
